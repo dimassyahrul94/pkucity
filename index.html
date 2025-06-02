@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kirim Lokasi ke WhatsApp</title>
+</head>
+<body>
+  <h2>Mohon tunggu, lokasi Anda sedang dideteksi...</h2>
+  <p id="status">Mendeteksi lokasi...</p>
+
+  <script>
+    const nomorWhatsapp = "6281234567890"; // ← Ganti dengan nomor Anda
+
+    function kirimKeWhatsApp(lat, lon) {
+      const pesan = `Halo, ini lokasi saya:\nhttps://www.google.com/maps?q=${lat},${lon}`;
+      const url = `https://wa.me/${nomorWhatsapp}?text=${encodeURIComponent(pesan)}`;
+      window.location.href = url;
+    }
+
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          document.getElementById("status").innerText = "Lokasi berhasil dideteksi.";
+          kirimKeWhatsApp(lat, lon);
+        },
+        function(error) {
+          document.getElementById("status").innerText =
+            "Gagal mendeteksi lokasi: " + error.message;
+        }
+      );
+    } else {
+      document.getElementById("status").innerText = "Browser tidak mendukung geolokasi.";
+    }
+  </script>
+</body>
+</html>
